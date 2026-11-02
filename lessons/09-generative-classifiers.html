@@ -1,1 +1,126 @@
-<header class="hero"><div class="eyebrow">درس ۹ · Statistical Pattern Recognition</div><h1>طبقه‌بندهای مولد گاوسی، LDA و QDA</h1><p>از توزیع کلاس‌شرطی تا برچسب؛ فرض‌های کوواریانس را مقایسه کن و ارزیابی بدون نشت داده را یاد بگیر.</p><div class="chips"><span class="chip">مدل مولد</span><span class="chip">LDA/QDA</span><span class="chip">ارزیابی</span></div></header><div class="notice hidepresent">برای مطالعه از تب‌ها استفاده کن؛ برای نمایش روی پروژکتور «حالت ارائه» را فعال کن.</div><div class="tabs" role="tablist"><button class="tab" role="tab" aria-controls="p1" aria-selected="true">مدل‌ها</button><button class="tab" role="tab" aria-controls="p2" aria-selected="false">برازش</button><button class="tab" role="tab" aria-controls="p3" aria-selected="false">LDA و QDA</button><button class="tab" role="tab" aria-controls="p4" aria-selected="false">ارزیابی</button></div><div class="panel active" id="p1" role="tabpanel"><section><h2>مولد در برابر تفکیکی</h2><div class="grid"><div class="card"><h3>مولد</h3><p>مدل می‌کند \(p(x|C_k)\) و \(P(C_k)\) چگونه‌اند، سپس با قانون بیز به پسین می‌رسد.</p><div class="formula">\[p(x|C_k),P(C_k)\to P(C_k|x)\]</div></div><div class="card"><h3>تفکیکی</h3><p>مستقیماً مرز تصمیم یا احتمال کلاس را یاد می‌گیرد؛ لازم نیست توزیع کامل ویژگی‌ها را بازسازی کند.</p></div></div></section></div><div class="panel " id="p2" role="tabpanel"><section><h2>طبقه‌بند گاوسی، گام‌به‌گام</h2><div class="step"><div class="num">1</div><div class="stepbody"><strong>برازش</strong>از دادهٔ آموزش میانگین، کوواریانس و پیشین هر کلاس را تخمین بزن.</div></div><div class="step"><div class="num">2</div><div class="stepbody"><strong>امتیاز</strong>برای هر کلاس \(p(x|C_k)P(C_k)\) را محاسبه کن. مخرج بیز بین کلاس‌ها مشترک است و برای انتخاب لازم نیست.</div></div><div class="step"><div class="num">3</div><div class="stepbody"><strong>تصمیم</strong>کلاس با بیشترین امتیاز را انتخاب کن. در پیاده‌سازی، log-score معمولاً پایدارتر است و از underflow جلوگیری می‌کند.</div></div><div class="formula">\[\hat C=\arg\max_k p(x|C_k)P(C_k)\]</div></section></div><div class="panel " id="p3" role="tabpanel"><section><h2>کوواریانس مشترک یا جدا؟</h2><div class="tablewrap"><table><tr><th>مدل</th><th>فرض</th><th>مرز تصمیم</th><th>مبادله</th></tr><tr><td>LDA</td><td>کوواریانس مشترک Σ</td><td>خطی</td><td>پارامتر کمتر، فرض قوی‌تر</td></tr><tr><td>QDA</td><td>کوواریانس جدا Σₖ</td><td>عموماً درجه دوم</td><td>انعطاف بیشتر، ناپایداری در دادهٔ کم</td></tr></table></div><p>مثال: کلاس کم با داده‌های [-1,0,0,1] میانگین ۰ و واریانس ML برابر ۰٫۵ دارد. کلاس زیاد با [2,2,2,6] میانگین ۳ و واریانس ML برابر ۳ دارد. واریانس مشترک تجمیعی با وزن مساوی نمونه‌ها \((4×0.5+4×3)/8=1.75\) می‌شود.</p></section></div><div class="panel " id="p4" role="tabpanel"><section><h2>ماتریس اغتشاش و نشت داده</h2><p>در ماتریس اغتشاش، سطرها کلاس واقعی و ستون‌ها پیش‌بینی هستند. قطر اصلی پیش‌بینی درست را نشان می‌دهد؛ خانه‌های بیرون قطر خطاها هستند. عملکرد هر کلاس را جداگانه ببین، چون دقت کلی ممکن است ضعف کلاس کم‌نمونه را پنهان کند.</p><div class="callout bad"><strong>نشت داده:</strong> اگر میانگین، واریانس، انتخاب ویژگی یا آستانه با استفاده از دادهٔ آزمون تعیین شود، ارزیابی مستقل نیست. ابتدا داده را تقسیم کن؛ fit و انتخاب را روی آموزش/اعتبارسنجی انجام بده و آزمون را برای ارزیابی نهایی نگه دار.</div><div class="exercise"><h3>تمرین 1</h3><p>چرا نتیجهٔ بهتر روی یک آزمون کوچک، برتری قطعی مدل را ثابت نمی‌کند؟</p><button class="btn" data-reveal="ans1">نمایش پاسخ</button><div class="answer" id="ans1">نمونهٔ کم، عدم‌قطعیت زیاد و وابستگی نتیجه به تقسیم داده ایجاد می‌کند. باید از ارزیابی مستقل و تحلیل محدودیت‌ها استفاده کرد.</div></div><div class="exercise"><h3>تمرین 2</h3><p>چرا QDA در دادهٔ کم ممکن است ناپایدارتر باشد؟</p><button class="btn" data-reveal="ans2">نمایش پاسخ</button><div class="answer" id="ans2">چون برای هر کلاس کوواریانس جدا برآورد می‌کند و پارامترهای بیشتری دارد.</div></div></section></div>
+<header class="hero">
+<div class="eyebrow">درس ۹ · Statistical Pattern Recognition</div>
+<h1>طبقه‌بندهای مولد گاوسی، LDA و QDA</h1>
+<p>در این درس می‌بینیم طبقه‌بند مولد (Generative Classifier) چطور از مدل‌کردن توزیع دادهٔ هر کلاس به تصمیم می‌رسد. با فرض گاوسی‌بودن چگالی کلاس-شرطی (Class-Conditional Density) به دو مدل معروف می‌رسیم: تحلیل تفکیک خطی (Linear Discriminant Analysis / LDA) با کوواریانس مشترک و مرز خطی، و تحلیل تفکیک درجه‌دو (Quadratic Discriminant Analysis / QDA) با کوواریانس جدا و مرز منحنی. در آزمایشگاه تعاملی هر دو مرز را می‌کشیم و در پایان خطر نشت داده (Data Leakage) در ارزیابی را می‌بینیم.</p>
+<div class="chips"><span class="chip">مدل مولد</span><span class="chip">LDA/QDA</span><span class="chip">آزمایشگاه تعاملی</span><span class="chip">ارزیابی</span><span class="chip">واژه‌نامه</span></div>
+</header>
+<div class="notice hidepresent">برای مطالعه از تب‌ها استفاده کن؛ برای نمایش روی پروژکتور «حالت ارائه» را فعال کن.</div>
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" aria-controls="p1" aria-selected="true">مفاهیم</button>
+<button class="tab" role="tab" aria-controls="p2" aria-selected="false">فرمول‌ها</button>
+<button class="tab" role="tab" aria-controls="p3" aria-selected="false">آزمایشگاه مرز تصمیم</button>
+<button class="tab" role="tab" aria-controls="p4" aria-selected="false">ارزیابی و نشت داده</button>
+<button class="tab" role="tab" aria-controls="p5" aria-selected="false">تمرین</button>
+<button class="tab" role="tab" aria-controls="p6" aria-selected="false">واژه‌نامه</button>
+</div>
+
+<div class="panel active" id="p1" role="tabpanel"><section>
+<h2>مولد (Generative) در برابر تشخیصی (Discriminative): دو فلسفهٔ طبقه‌بندی</h2>
+<p>تصور کنید می‌خواهید بگویید یک میوه سیب است یا پرتقال. <strong>راه مولد:</strong> برای هر میوه «نقشهٔ کامل» بسازید — توزیع رنگ و شکل و وزن سیب‌ها را یاد بگیرید و همین را برای پرتقال‌ها — و برای میوهٔ جدید بپرسید: «کدام نقشه تولید چنین نمونه‌ای را محتمل‌تر می‌کند؟» <strong>راه تشخیصی:</strong> نقشه نسازید؛ فقط مرزی بین دو دسته بکشید.</p>
+<p>طبقه‌بند مولد (Generative Classifier) راه مولد است: چگالی کلاس-شرطی \(p(x\mid C_k)\) («دادهٔ کلاس \(C_k\) چه شکلی است») و پیشین کلاس (Class Prior) \(P(C_k)\) («هر کلاس چقدر محتمل است») را مدل می‌کند و سپس با خط‌کش بیز (Bayes' Rule) به پسین (Posterior) می‌رسد.</p>
+<div class="grid3">
+<div class="card"><h3>۱. چگالی کلاس-شرطی</h3><p>شکل پراکندگی ویژگی‌های هر کلاس را مدل کن؛ مثلاً با توزیعی گاوسی (Gaussian) با میانگین و کوواریانس خودش.</p><div class="metric">p(x|Cₖ)</div></div>
+<div class="card"><h3>۲. پیشین کلاس</h3><p>سهم هر کلاس از جمعیت؛ اگر ۷۰٪ نمونه‌ها سیب بودند، \(P(C_{\text{سیب}})=0.7\).</p><div class="metric">P(Cₖ)</div></div>
+<div class="card"><h3>۳. تصمیم با پسین</h3><p>با قانون بیز پسین هر کلاس را بساز و بیشترین را انتخاب کن.</p><div class="metric">argmaxₖ P(Cₖ|x)</div></div>
+</div>
+<div class="formula">\[P(C_k\mid x)=\frac{p(x\mid C_k)\,P(C_k)}{\sum_j p(x\mid C_j)\,P(C_j)},\qquad\hat C=\arg\max_k\; p(x\mid C_k)\,P(C_k)\]</div>
+<div class="callout">چرا «مولد»؟ چون مدل \(p(x\mid C_k)\) می‌تواند نمونهٔ تازه «تولید» کند. طبقه‌بند تشخیصی (Discriminative Classifier) فقط مرز تصمیم یا احتمال کلاس را یاد می‌گیرد و چنین نقشه‌ای ندارد. مخرج کسر بیز برای همهٔ کلاس‌ها یکسان است، پس برای انتخابِ بیشترین لازم نیست حسابش کنیم.</div>
+<div class="study-note"><h3>یادداشت مطالعاتی</h3>
+<p>در این درس چگالی کلاس-شرطی (Class-Conditional Density) گاوسی با پارامترهای برآوردشده و پیشین کلاس (Class Prior) تجربی می‌سازیم و با خط‌کش بیز به پسین و \(\arg\max_k p(x\mid C_k)P(C_k)\) می‌رسیم؛ حالت کوواریانس مشترک همان LDA و حالت کوواریانس جدا همان QDA است. <strong>ترمینولوژی این بخش:</strong> طبقه‌بند مولد (Generative Classifier)، طبقه‌بند تشخیصی (Discriminative Classifier)، چگالی کلاس-شرطی (Class-Conditional Density)، پیشین کلاس (Class Prior)، پسین (Posterior).</p></div>
+<div class="study-note"><h3>خانوادهٔ مولدها: از گاوسی به طبقه‌بند ساده (Naive Bayes)</h3>
+<p>طبقه‌بندهای مولد دو جنس ویژگی دارند: ویژگی پیوسته با چگالی گاوسی کلاس-شرطی (همین LDA/QDA این درس) و ویژگی گسسته/دسته‌ای با جدول احتمال شرطی — که همان طبقه‌بند ساده (Naive Bayes) است. در هر دو، قانون تصمیم یکی است: argmax پسین \(P(Y\mid X)\propto P(X\mid Y)P(Y)\).</p>
+<p>یک مثال عددی کوتاه با همان منطق LDA: پیشین کلاس بیماری ۰٫۱؛ ویژگی‌های فشارخون بالا/کلسترول بالا/ECG غیرطبیعی با درست‌نمایی‌های مشروط \(P(\cdot\mid D{=}1)=0.8, 0.7, 0.9\) و \(P(\cdot\mid D{=}0)=0.2, 0.3, 0.1\). امتیازها: \(S_1=0.10\times0.80\times0.70\times0.90=0.0504\) و \(S_0=0.90\times0.20\times0.30\times0.10=0.0054\)؛ پسین: \(0.0504/(0.0504+0.0054)\approx90.32\%\). تذکر: این احتمال لزوماً کالیبره (Calibrated) نیست؛ عدد خروجی لزوماً تکرارپذیری واقعی ندارد و ارزیابی باید کالیبراسیون را هم بسنجد. تفاوت اصلی با LDA/QDA: در Naive Bayes فرض استقلال ویژگی‌ها پس از شرط‌گذاری بر کلاس صریح است و در LDA با کوواریانس مشترک فقط ساختار مرز خطی دارد.</p></div>
+</section></div>
+
+<div class="panel" id="p2" role="tabpanel"><section>
+<h2>گاوسی کلاس-شرطی و تابع تشخیص (Discriminant Function)</h2>
+<p>فرض اصلی: دادهٔ هر کلاس از توزیع نرمال چندمتغیره (Multivariate Gaussian) می‌آید؛ یک «تودهٔ ابرمانند» با مرکز \(\mu_k\) و ماتریس کوواریانس (Covariance Matrix) \(\Sigma_k\):</p>
+<div class="formula">\[p(x\mid C_k)=\frac{1}{(2\pi)^{d/2}\,|\Sigma_k|^{1/2}}\;\exp\!\Big(-\tfrac{1}{2}\,(x-\mu_k)^{\top}\Sigma_k^{-1}(x-\mu_k)\Big)\]</div>
+<div class="step"><div class="num">1</div><div class="stepbody"><strong>برازش</strong>برای هر کلاس، میانگین نمونه‌ای \(\hat\mu_k\)، کوواریانس نمونه‌ای \(\hat\Sigma_k\) و پیشین تجربی \(\hat P(C_k)=n_k/n\) را با برآورد بیشینه درست‌نمایی (Maximum Likelihood Estimation / MLE) از دادهٔ آموزش تخمین بزن.</div></div>
+<div class="step"><div class="num">2</div><div class="stepbody"><strong>امتیاز</strong>برای هر نمونهٔ \(x\) تابع تشخیص (Discriminant Function) هر کلاس را حساب کن. لگاریتم، حاصل‌ضرب را جمع می‌کند و محاسبه را پایدارتر می‌سازد:</div></div>
+<div class="formula">\[\delta_k(x)=\ln p(x\mid C_k)+\ln P(C_k)=-\tfrac{1}{2}\ln|\Sigma_k|-\tfrac{1}{2}(x-\mu_k)^{\top}\Sigma_k^{-1}(x-\mu_k)+\ln P(C_k)+\text{const}\]</div>
+<div class="step"><div class="num">3</div><div class="stepbody"><strong>تصمیم</strong>کلاسِ با بزرگ‌ترین \(\delta_k(x)\) را انتخاب کن؛ جملهٔ ثابت برای همهٔ کلاس‌ها یکی است و حذف می‌شود.</div></div>
+<h3>LDA: وقتی \(\Sigma_1=\Sigma_2\) مرز خطی می‌شود</h3>
+<p>اگر کوواریانس هر دو کلاس یکی باشد (اشتراک کوواریانس / Shared Covariance)، جملهٔ درجه‌دوِ \(x^{\top}\Sigma^{-1}x\) که برای هر دو برابر است از اختلاف دو تابع تشخیص حذف می‌شود و آنچه می‌ماند خطی است:</p>
+<div class="formula">\[g(x)=\delta_1(x)-\delta_2(x)=w^{\top}x+b,\qquad w=\Sigma^{-1}(\mu_1-\mu_2)\]</div>
+<p>پس مرز تصمیم (Decision Boundary) — نقاطی که \(g(x)=0\) — خط راست است؛ با پیشین‌های مساوی از نقطهٔ میانیِ دو میانگین می‌گذرد و جهتش را کوواریانس مشترک تعیین می‌کند.</p>
+<h3>QDA: وقتی هر کلاس \(\Sigma_k\) خودش را دارد</h3>
+<p>با کوواریانس جدا، جملهٔ درجه‌دو باقی می‌ماند و در اختلاف دو تابع تشخیص این عبارت اضافه می‌شود:</p>
+<div class="formula">\[\delta_1(x)-\delta_2(x)=\cdots-\tfrac{1}{2}x^{\top}\!\big(\Sigma_1^{-1}-\Sigma_2^{-1}\big)x-\tfrac{1}{2}\ln\frac{|\Sigma_1|}{|\Sigma_2|}\]</div>
+<p>مرز حالا درجه‌دو (Quadratic) است: خط، بیضی، پارابولا یا هذلولی — در عمل معمولاً منحنی‌ای هم‌شکل با دو توزیع. قیمت این انعطاف پارامترهای بیشتر است: کوواریانس در \(d\) بُعد \(d(d+1)/2\) پارامتر مستقل دارد.</p>
+<div class="tablewrap"><table><thead><tr><th>مدل</th><th>فرض</th><th>مرز تصمیم</th><th>پارامترها</th><th>کی استفاده کنیم؟</th></tr></thead><tbody>
+<tr><td>LDA</td><td>کوواریانس مشترک \(\Sigma\)</td><td>خطی</td><td>کم</td><td>دادهٔ کم، توزیع‌های هم‌شکل</td></tr>
+<tr><td>QDA</td><td>کوواریانس جدا \(\Sigma_k\)</td><td>عموماً درجه‌دو (منحنی)</td><td>زیاد</td><td>دادهٔ فراوان، شکل‌های متفاوت</td></tr>
+</tbody></table></div>
+<div class="callout">قاعدهٔ سرانگشتی: دادهٔ کم یا شکل‌های مشابه → LDA (ساده و مقاوم)؛ دادهٔ زیاد و پراکندگی‌های واقعاً متفاوت → QDA (انعطاف‌پذیر). این همان مبادلهٔ سوگیری-واریانس (Bias-Variance Tradeoff) است که در قالب فرض‌های کوواریانس خودش را نشان می‌دهد.</div>
+<div class="study-note"><h3>یادداشت مطالعاتی</h3>
+<p>در LDA کوواریانس مشترک، جملات درجه‌دو را در اختلاف توابع تشخیص حذف می‌کند و مرز تصمیم خطی است؛ در QDA جملهٔ درجه‌دو و \(\ln|\Sigma_k|\) باقی می‌مانند و مرز درجه‌دو می‌شود. نمونهٔ عددی کوواریانس تجمیعی را در تمرین ۳ ببینید.</p>
+<p><strong>ترمینولوژی این بخش:</strong> توزیع نرمال چندمتغیره (Multivariate Gaussian)، ماتریس کوواریانس (Covariance Matrix)، تابع تشخیص (Discriminant Function)، اشتراک کوواریانس (Shared Covariance)، مرز تصمیم (Decision Boundary)، تحلیل تفکیک خطی (LDA)، تحلیل تفکیک درجه‌دو (QDA).</p></div>
+</section></div>
+
+<div class="panel" id="p3" role="tabpanel"><section>
+<h2>آزمایشگاه: مرز تصمیم LDA و QDA را ببین</h2>
+<p>۱۴۰ نقطه داریم: ۷۰ نقطهٔ <strong>کلاس الف</strong> (فیروزه‌ای) تقریباً گرد و ۷۰ نقطهٔ <strong>کلاس ب</strong> (آبی) کشیده و کج با کوواریانس چرخیده. در حالت <strong>LDA</strong> مدل یک کوواریانس مشترک (میانگینِ دو کوواریانس) فرض می‌کند و مرز خطی می‌کشد؛ در <strong>QDA</strong> هر کلاس بیضیِ خودش را دارد و مرز منحنی می‌شود. بیضی‌های رنگی محدودهٔ یک انحراف معیار (1σ) هر توزیع‌اند و خط قرمز مرز تصمیم است.</p>
+<div class="row"><button class="btn" id="l9-lda" aria-pressed="true">حالت LDA (کوواریانس مشترک)</button><button class="btn" id="l9-qda" aria-pressed="false">حالت QDA (کوواریانس جدا)</button></div>
+<svg id="l9-lab" class="chart" viewBox="0 0 640 440" role="img" aria-label="نمودار پراکندگی دو کلاس گاوسی با بیضی‌های یک انحراف معیار و مرز تصمیم خطی یا درجه‌دو"></svg>
+<div class="grid">
+<div class="card"><p>دقت آموزش (Training Accuracy)</p><div class="metric" id="l9-acc">—</div></div>
+<div class="card"><p>دادهٔ آزمایشگاه</p><p>۱۴۰ نقطهٔ قطعی: ۷۰ نقطهٔ کلاس الف (تقریباً گرد) و ۷۰ نقطهٔ کلاس ب (کشیده و مایل). پیشین‌ها مساوی‌اند.</p></div>
+</div>
+<div class="callout" id="l9-expl">کوواریانس مشترک فرض شد؛ مرز خطی است — ساده و مقاوم</div>
+<p><strong>چه چیزی را تماشا کن؟</strong> در LDA دو بیضی هم‌شکل می‌بینی: مدل از هر دو کلاس یک «شکل واحد» ساخته است. در QDA بیضی کلاس ب به شکل واقعیِ خودش برمی‌گردد و مرز کمی خم می‌شود. دقت آموزش دو حالت را مقایسه کن — اما این دقت روی دادهٔ برازش است؛ قضاوت نهایی با دادهٔ آزمونِ جدا (تب بعدی).</p>
+<div class="study-note"><h3>یادداشت مطالعاتی</h3>
+<p>میانگین‌ها، کوواریانس‌ها و پیشین‌ها با برآورد بیشینه درست‌نمایی (MLE) برآورد می‌شوند و مرز تصمیم، مجموعهٔ نقاطی است که دو تابع تشخیص برابرند؛ در LDA خط راست، در QDA منحنی درجه‌دو.</p>
+<p>مشاهدهٔ کلیدی: اشتراک کوواریانس (Shared Covariance) یک قید است؛ وقتی واقعیت با قید سازگار نباشد (اینجا: کلاس ب کشیده و مایل)، مرز خطی جای بهینه را از دست می‌دهد و دقت پایین‌تر می‌آید. اگر شکل‌ها مشابه بودند، QDA با پارامتر بیشتر فقط ناپایداری می‌افزود. <strong>ترمینولوژی این بخش:</strong> بیضی کوواریانس (Covariance Ellipse)، دقت آموزش (Training Accuracy)، بیش‌برازش (Overfitting).</p></div>
+</section></div>
+
+<div class="panel" id="p4" role="tabpanel"><section>
+<h2>ارزیابی بدون نشت داده (Data Leakage)</h2>
+<p>قانون طلایی: <strong>هر چیزی که از داده یاد گرفته می‌شود، فقط از مجموعه آموزش (Training Set) یاد گرفته می‌شود.</strong> یعنی میانگین‌های \(\hat\mu_k\)، کوواریانس‌های \(\hat\Sigma_k\) و پیشین‌های \(\hat P(C_k)\) همگی باید از دادهٔ آموزش بیایند؛ اگر حتی یکی را با داده‌ای حساب کنیم که در ارزیابی هم نقش دارد، ارزیابی دیگر مستقل نیست.</p>
+<div class="step"><div class="num">1</div><div class="stepbody"><strong>تقسیم کن</strong>قبل از هر کاری داده را به مجموعه آموزش (Training Set)، اعتبارسنجی (Validation) و مجموعه آزمون (Test Set) بشکن.</div></div>
+<div class="step"><div class="num">2</div><div class="stepbody"><strong>برازش کن</strong>\(\hat\mu_k\)، \(\hat\Sigma_k\) و \(\hat P(C_k)\) را فقط با دادهٔ آموزش تخمین بزن؛ هیچ نگاهی به آزمون نداشته باش.</div></div>
+<div class="step"><div class="num">3</div><div class="stepbody"><strong>انتخاب کن</strong>تصمیم‌های طراحی مثل «LDA یا QDA؟» یا انتخاب ویژگی‌ها را با عملکرد روی اعتبارسنجی بگیر، نه آزمون.</div></div>
+<div class="step"><div class="num">4</div><div class="stepbody"><strong>یک‌بار بسنج</strong>مجموعهٔ آزمون را فقط یک‌بار و در پایان باز کن؛ اگر بعد از دیدن نتایج مدل را دوباره عوض کردی، آزمون عملاً به مجموعهٔ انتخاب تبدیل شده است.</div></div>
+<div class="callout bad"><strong>نشت داده (Data Leakage):</strong> اگر میانگین، کوواریانس، پیشین کلاس، انتخاب ویژگی یا آستانهٔ تصمیم با استفاده از دادهٔ آزمون تعیین شود، آزمون دیگر «ندیده» نیست و عدد گزارش‌شده خوش‌بینانه است. نشانهٔ رایج: عملکرد عالی هنگام توسعه، سقوط ناگهانی روی دادهٔ واقعیِ تازه.</div>
+<p>برای دیدن جزئیات خطاها از ماتریس اغتشاش (Confusion Matrix) استفاده کن: سطرها کلاس واقعی، ستون‌ها پیش‌بینی؛ قطر اصلی درست‌ها و بیرون قطر خطاها. دقت کلیِ بالا می‌تواند ضعف کلاس کم‌نمونه را پنهان کند؛ عملکرد هر کلاس را جداگانه هم ببین.</p>
+<div class="formula">\[\text{Accuracy}=\frac{1}{n}\sum_{i=1}^{n}\mathbf{1}\big[\hat C(x_i)=C_i\big]\]</div>
+<div class="study-note"><h3>یادداشت مطالعاتی</h3>
+<p>پروتکل سالم: برازش پارامترها با مجموعه آموزش، انتخاب‌های طراحی مثل LDA در برابر QDA با اعتبارسنجی، و ارزیابی نهایی با مجموعه آزمون؛ برچسب (Label) نقاط آزمون فقط در همین مرحلهٔ آخر باز می‌شود. نشت داده (Data Leakage) هر مسیری است که اطلاعات آزمون به تصمیم‌های مدل‌سازی سرریز کند — از برازش کوواریانس روی کل داده تا انتخاب ویژگی با نگاه به آزمون. قاعدهٔ عملی: قبل از لمس مدل، داده را بشکن و سبد آزمون را قفل کن.</p>
+<p><strong>ترمینولوژی این بخش:</strong> مجموعه آموزش (Training Set)، اعتبارسنجی (Validation)، مجموعه آزمون (Test Set)، نشت داده (Data Leakage)، ماتریس اغتشاش (Confusion Matrix)، دقت (Accuracy)، برچسب (Label).</p></div>
+</section></div>
+
+<div class="panel" id="p5" role="tabpanel"><section>
+<h2>خودت را بسنج</h2>
+<div class="exercise"><h3>تمرین 1</h3><p>در LDA با پیشین‌های مساوی و کوواریانس مشترک \(\Sigma\)، مرز تصمیم از کدام نقطه می‌گذرد و چرا خطی است؟</p><button class="btn" data-reveal="ans1">نمایش پاسخ</button><div class="answer" id="ans1"><p>چون \(\Sigma_1=\Sigma_2=\Sigma\) است، جملهٔ درجه‌دوِ \(x^{\top}\Sigma^{-1}x\) در اختلاف دو تابع تشخیص حذف می‌شود و مرز معادلهٔ خطی \(w^{\top}x+b=0\) با \(w=\Sigma^{-1}(\mu_1-\mu_2)\) می‌ماند. با پیشین‌های مساوی، جملهٔ ثابت طوری ساده می‌شود که مرز از نقطهٔ میانیِ \((\mu_1+\mu_2)/2\) بگذرد — نقطه‌ای با فاصلهٔ ماهالانوبیس (Mahalanobis Distance) برابر از هر دو میانگین.</p></div></div>
+<div class="exercise"><h3>تمرین 2</h3><p>در آزمایشگاه تب قبل، اگر میانگین و کوواریانس هر دو کلاس را روی «همهٔ ۱۴۰ نقطه» برازش کنیم و دقت را روی همین نقاط گزارش کنیم، چه خطاهایی مرتکب شده‌ایم و چرا عدد گزارش‌شده قابل اعتماد نیست؟</p><button class="btn" data-reveal="ans2">نمایش پاسخ</button><div class="answer" id="ans2"><p>دو خطا: اول، برازش پارامترها روی داده‌ای که در ارزیابی هم به‌کار رفته، نشت داده (Data Leakage) است؛ مدل با «جواب‌های» ارزیابی هم تنظیم شده. دوم، گزارش دقت روی خودِ دادهٔ آموزش، دقت آموزش (Training Accuracy) است که ذاتاً خوش‌بینانه است و توان تعمیم (Generalization) را نشان نمی‌دهد. پروتکل درست: برازش فقط روی مجموعه آموزش و سنجش نهایی روی مجموعه آزمونِ جدا.</p></div></div>
+<div class="exercise"><h3>تمرین 3</h3><p>کلاس الف با داده‌های یک‌بعدی \([-1,0,0,1]\) میانگین ۰ و واریانس ML برابر ۰٫۵ دارد؛ کلاس ب با \([2,2,2,6]\) میانگین ۳ و واریانس ML برابر ۳. (الف) کوواریانس مشترک تجمیعی چقدر است؟ (ب) اگر همین چهار نمونهٔ کم، تمام دادهٔ ما باشد، کدام مدل منطقی‌تر است: LDA یا QDA؟</p><button class="btn" data-reveal="ans3">نمایش پاسخ</button><div class="answer" id="ans3"><p>(الف) با وزن مساوی نمونه‌ها: \((4\times0.5+4\times3)/8=1.75\). (ب) چون پراکندگی دو کلاس واقعاً متفاوت است، QDA مدل «صحیح‌تری» به نظر می‌رسد؛ اما با فقط ۴ نمونه در هر کلاس، برآورد کوواریانس جدا ناپایدار است و QDA بیش‌برازش می‌شود. انتخاب محتاطانه LDA با \(\Sigma=1.75\) است؛ اگر بعدها دادهٔ بیشتر آمد و تفاوت شکل پابرجا ماند، می‌توان به QDA کوچ کرد.</p></div></div>
+<div class="study-note"><h3>یادداشت مطالعاتی</h3>
+<p>هر سه تمرین رابطهٔ «فرض ↔ مرز ↔ داده» را تمرین می‌کنند: منطق حذف جملات درجه‌دو، مرز میان پارامترِ مدل و پروتکل ارزیابی، و مبادلهٔ پارامتر-پایداری در دادهٔ کم. <strong>ترمینولوژی این بخش:</strong> فاصلهٔ ماهالانوبیس (Mahalanobis Distance)، بیش‌برازش (Overfitting)، توان تعمیم (Generalization)، کوواریانس تجمیعی (Pooled Covariance).</p></div>
+</section></div>
+
+<div class="panel" id="p6" role="tabpanel"><section>
+<h2>واژه‌نامهٔ درس</h2>
+<p>معادل فارسی و انگلیسی اصطلاحات کلیدی این درس. هر دو شکل را یاد بگیر؛ در مقالات اصلی فقط شکل انگلیسی به‌کار می‌رود.</p>
+<div class="tablewrap"><table><thead><tr><th>فارسی</th><th>انگلیسی</th><th>توضیح ساده</th></tr></thead><tbody>
+<tr><td>طبقه‌بند مولد</td><td>Generative Classifier</td><td>مدلی که \(p(x\mid C_k)\) و پیشین کلاس را یاد می‌گیرد و با قانون بیز تصمیم می‌گیرد؛ می‌تواند نمونهٔ تازه «تولید» کند.</td></tr>
+<tr><td>طبقه‌بند تشخیصی</td><td>Discriminative Classifier</td><td>مدلی که مستقیماً مرز تصمیم یا \(P(C\mid x)\) را یاد می‌گیرد، بدون بازسازی توزیع داده.</td></tr>
+<tr><td>چگالی کلاس-شرطی</td><td>Class-Conditional Density</td><td>توزیع ویژگی‌ها «به شرطِ» عضویت در یک کلاس؛ همان \(p(x\mid C_k)\).</td></tr>
+<tr><td>برآورد بیشینه درست‌نمایی</td><td>Maximum Likelihood Estimation / MLE</td><td>انتخاب پارامترهایی (میانگین، کوواریانس، پیشین) که دادهٔ دیده‌شده را محتمل‌ترین کنند.</td></tr>
+<tr><td>تحلیل تفکیک خطی</td><td>Linear Discriminant Analysis / LDA</td><td>نسخهٔ گاوسی مولد با کوواریانس مشترک برای همهٔ کلاس‌ها؛ مرز تصمیم خط است.</td></tr>
+<tr><td>تحلیل تفکیک درجه‌دو</td><td>Quadratic Discriminant Analysis / QDA</td><td>همان مدل ولی با کوواریانس جدا برای هر کلاس؛ مرز تصمیم منحنی درجه‌دو می‌شود.</td></tr>
+<tr><td>مرز تصمیم</td><td>Decision Boundary</td><td>مجموعهٔ نقاطی که امتیاز دو کلاس برابر است؛ جایی که مدل بین دو برچسب دودلی می‌ماند.</td></tr>
+<tr><td>تابع تشخیص</td><td>Discriminant Function</td><td>امتیاز هر کلاس برای یک نمونه: لگاریتم چگالی به‌علاوهٔ لگاریتم پیشین؛ بیشترین امتیاز برنده است.</td></tr>
+<tr><td>پیشین کلاس</td><td>Class Prior</td><td>احتمال هر کلاس قبل از دیدن داده؛ معمولاً از نسبت نمونه‌های هر کلاس در آموزش.</td></tr>
+<tr><td>اشتراک کوواریانس</td><td>Shared Covariance</td><td>فرض این‌که همهٔ کلاس‌ها یک ماتریس کوواریانس مشترک دارند؛ همان فرض کلیدی LDA.</td></tr>
+<tr><td>نشت داده</td><td>Data Leakage</td><td>سرریز اطلاعات مجموعه آزمون به برازش یا انتخاب مدل؛ عامل اعداد ارزیابیِ خوش‌بینانه.</td></tr>
+<tr><td>مجموعه آموزش</td><td>Training Set</td><td>داده‌ای که پارامترهای مدل (\(\mu_k\)، \(\Sigma_k\)، پیشین‌ها) فقط از آن برازش می‌شوند.</td></tr>
+<tr><td>مجموعه آزمون</td><td>Test Set</td><td>دادهٔ قفل‌شده‌ای که فقط یک‌بار در پایان، برای گزارش عدد نهایی باز می‌شود.</td></tr>
+<tr><td>اعتبارسنجی</td><td>Validation</td><td>دادهٔ میانی برای انتخاب‌های طراحی مثل «LDA یا QDA»؛ نه برازش با آن، نه ارزیابی نهایی با آن.</td></tr>
+<tr><td>برچسب</td><td>Label</td><td>کلاسِ درست هر نمونه؛ در ارزیابی با پیش‌بینی مدل مقایسه می‌شود.</td></tr>
+<tr><td>طبقه‌بند ساده</td><td>Naive Bayes</td><td>طبقه‌بند مولد برای ویژگی‌های گسسته/دسته‌ای: با فرض استقلال ویژگی‌ها به شرط کلاس، درست‌نمایی‌های شرطی را ضرب می‌کند و پسین می‌سازد.</td></tr>
+<tr><td>کالیبراسیون</td><td>Calibration</td><td>هم‌خوانی عدد خروجی مدل با فراوانی واقعی همان رویداد؛ پسینِ گزارش‌شده باید معنا داشته باشد و ارزیابی باید آن را جداگانه بسنجد.</td></tr>
+</tbody></table></div>
+<div class="callout">نکتهٔ فرهنگ لغت: «Discriminant» را هم «ممیز» و هم «تفکیک‌کننده» ترجمه کرده‌اند؛ LDAِ این درس را با «Latent Dirichlet Allocation» پردازش متن اشتباه نگیرید.</div>
+<div class="study-note"><h3>خلاصهٔ درس ۹</h3>
+<p>طبقه‌بند مولد (Generative Classifier) چگالی کلاس-شرطی (Class-Conditional Density) و پیشین کلاس (Class Prior) را مدل می‌کند و با خط‌کش بیز به پسین و \(\arg\max\) می‌رسد. اشتراک کوواریانس (Shared Covariance) جملات درجه‌دو را حذف و مرز تصمیم را خطی می‌کند (تحلیل تفکیک خطی / LDA)؛ کوواریانس جدا، مرز را منحنی و درجه‌دو می‌کند (تحلیل تفکیک درجه‌دو / QDA). در آزمایشگاه دیدیم همین یک فرض شکل مرز را عوض می‌کند. و قانون ارزیابی: برازش فقط روی مجموعه آموزش، انتخاب طراحی با اعتبارسنجی، سنجش نهایی با مجموعه آزمونِ قفل‌شده — تا نشت داده (Data Leakage) عدد خوش‌بینانه‌ای به ما نفروشد.</p></div>
+</section></div>
