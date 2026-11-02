@@ -53,8 +53,8 @@ shutil.copy2(ROOT / "course.json", DIST / "course.json")
 
 for index, lesson in enumerate(lessons):
     content = (ROOT / lesson["content"]).read_text(encoding="utf-8")
-    previous = f'<a class="btn" href="{lessons[index - 1]["file"]}">← درس قبلی</a>' if index else "<span></span>"
-    following = f'<a class="btn" href="{lessons[index + 1]["file"]}">درس بعدی →</a>' if index + 1 < len(lessons) else "<span></span>"
+    previous = f'<a class="btn" href="{lessons[index - 1]["file"]}">→ درس قبلی</a>' if index else "<span></span>"
+    following = f'<a class="btn" href="{lessons[index + 1]["file"]}">درس بعدی ←</a>' if index + 1 < len(lessons) else "<span></span>"
     page = (
         layout.replace("{{TITLE}}", lesson["title"])
         .replace("{{DESCRIPTION}}", lesson["description"])
