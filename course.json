@@ -1,0 +1,26 @@
+{
+  "id": "statistical-pattern-recognition",
+  "title": "پردازش آماری الگو",
+  "description": "آموزش پردازش آماری الگو از احتمال بیزی تا طبقه‌بندی آماری؛ با توضیح شهودی، استنتاج مرحله‌به‌مرحله، مثال عددی، نمودار و تمرین پاسخ‌دار.",
+  "language": "fa",
+  "dir": "rtl",
+  "level": "کارشناسی ارشد و دکتری",
+  "category": "پردازش الگو",
+  "tags": ["پردازش آماری الگو", "آمار", "یادگیری ماشین", "طبقه‌بندی"],
+  "lectures": [
+    { "id": "bayesian-foundations", "title": "مبانی استدلال بیزی", "order": 1, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "ml-map-estimation", "title": "تخمین ML و MAP", "order": 2, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "conditional-bayes-networks", "title": "قانون بیز و شبکه‌های بیزی", "order": 3, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "bayesian-decision-costs", "title": "تصمیم‌گیری بیزی", "order": 4, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "hypothesis-testing-pvalue", "title": "آزمون فرض و p-value", "order": 5, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "threshold-roc", "title": "آستانه و ROC", "order": 6, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "gaussian-covariance", "title": "گاوسی و کوواریانس", "order": 7, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "mahalanobis-distance", "title": "فاصلهٔ ماهالانوبیس", "order": 8, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "generative-classifiers", "title": "طبقه‌بند مولد، LDA و QDA", "order": 9, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "course-project-review", "title": "مینی‌پروژه و مرور", "order": 10, "durationMinutes": 0, "objectives": [], "status": "published" }
+  ],
+  "schemaVersion": "1.0.0",
+  "templateVersion": "1.0.0",
+  "license": "CC-BY-4.0",
+  "updatedAt": "2026-11-02"
+}
