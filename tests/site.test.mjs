@@ -1,77 +1,87 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cp, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { cp, mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generate } from '../scripts/build-site.mjs';
+import { promisify } from 'node:util';
 
+const execFileAsync = promisify(execFile);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const buildScript = path.join(root, 'build.py');
 
-const lessonPages = {
-  '01-bayesian-foundations.html': 'مبانی استدلال بیزی',
-  '02-ml-map-estimation.html': 'تخمین ML و MAP',
-  '03-conditional-bayes-networks.html': 'قانون بیز و شبکه‌های بیزی',
-  '04-bayesian-decision-costs.html': 'تصمیم‌گیری بیزی',
-  '05-hypothesis-testing-pvalue.html': 'آزمون فرض و p-value',
-  '06-threshold-roc.html': 'آستانه و ROC',
-  '07-gaussian-covariance.html': 'گاوسی و کوواریانس',
-  '08-mahalanobis-distance.html': 'فاصلهٔ ماهالانوبیس',
-  '09-generative-classifiers.html': 'طبقه‌بند مولد، LDA و QDA',
-  '10-course-project-review.html': 'مینی‌پروژه و مرور',
-};
+const lessons = JSON.parse(await readFile(path.join(root, 'lessons.json'), 'utf8'));
+const course = JSON.parse(await readFile(path.join(root, 'course.json'), 'utf8'));
 
-async function tempDirectory() {
-  return mkdtemp(path.join(os.tmpdir(), 'spr-site-'));
+async function buildIntoTempDirectory(t) {
+  const outputDir = await mkdtemp(path.join(os.tmpdir(), 'spr-dist-'));
+  t.after(() => rm(outputDir, { recursive: true, force: true }));
+  await execFileAsync('python3', [buildScript, outputDir]);
+  return outputDir;
 }
 
-test('generates a flat dist with the authored index and all lesson pages', async (t) => {
-  const outputDir = await tempDirectory();
-  t.after(() => rm(outputDir, { recursive: true, force: true }));
-  await generate({ sourceDir: root, outputDir });
-
-  const index = await readFile(path.join(outputDir, 'index.html'), 'utf8');
-  for (const [file, title] of Object.entries(lessonPages)) {
-    assert.match(index, new RegExp(`href="${file}"`));
-    assert.ok(index.includes(title), file);
+async function copySourceIntoTempDirectory(t) {
+  const sourceDir = await mkdtemp(path.join(os.tmpdir(), 'spr-src-'));
+  t.after(() => rm(sourceDir, { recursive: true, force: true }));
+  for (const name of ['build.py', 'index.html', 'lessons.json', 'course.json', 'templates', 'lessons', 'assets']) {
+    await cp(path.join(root, name), path.join(sourceDir, name), { recursive: true });
   }
+  return sourceDir;
+}
+
+test('builds a flat dist with the فهرست, all lesson pages, assets, and manifests', async (t) => {
+  const outputDir = await buildIntoTempDirectory(t);
 
   const files = await readdir(outputDir);
-  assert.deepEqual(files.filter((file) => file.endsWith('.html')).sort(), ['index.html', ...Object.keys(lessonPages)].sort());
-  assert.ok(files.includes('course.json'));
-  assert.ok(!files.includes('README.md'));
-  assert.ok(!files.includes('contents'));
-  assert.doesNotMatch(index, /href="contents\//);
-});
-
-test('every lesson page links back to the فهرست', async () => {
-  for (const file of Object.keys(lessonPages)) {
-    const html = await readFile(path.join(root, 'contents', file), 'utf8');
-    assert.match(html, /href="index\.html"/, file);
+  const html = files.filter((file) => file.endsWith('.html')).sort();
+  assert.deepEqual(html, ['index.html', ...lessons.map((lesson) => lesson.file)].sort());
+  for (const name of ['course.json', 'lessons.json']) {
+    assert.ok(files.includes(name), `missing ${name} in dist root`);
+  }
+  for (const relativePath of ['assets/css/style.css', 'assets/js/main.js', 'assets/js/index.js']) {
+    await assert.ok(readFile(path.join(outputDir, ...relativePath.split('/')), 'utf8'), relativePath);
+  }
+  for (const lesson of lessons) {
+    await assert.ok(readFile(path.join(outputDir, ...lesson.script.split('/')), 'utf8'), lesson.script);
   }
 });
 
-test('rejects an invalid manifest', async (t) => {
-  const sourceDir = await tempDirectory();
-  const outputDir = await tempDirectory();
-  t.after(() => Promise.all([rm(sourceDir, { recursive: true, force: true }), rm(outputDir, { recursive: true, force: true })]));
-  await cp(path.join(root, 'contents'), path.join(sourceDir, 'contents'), { recursive: true });
-  const manifest = JSON.parse(await readFile(path.join(root, 'course.json'), 'utf8'));
-  manifest.schemaVersion = '0.0.0';
-  await cp(path.join(root, 'course.json'), path.join(sourceDir, 'course.json'));
-  await writeFile(path.join(sourceDir, 'course.json'), JSON.stringify(manifest));
+test('فهرست links to every lesson and every lesson page links back to the فهرست', async (t) => {
+  const outputDir = await buildIntoTempDirectory(t);
 
-  await assert.rejects(generate({ sourceDir, outputDir }), /invalid manifest/);
+  const index = await readFile(path.join(outputDir, 'index.html'), 'utf8');
+  for (const lesson of lessons) {
+    assert.ok(index.includes(`href="${lesson.file}"`), `فهرست does not link to ${lesson.file}`);
+  }
+
+  for (const [position, lesson] of lessons.entries()) {
+    const page = await readFile(path.join(outputDir, lesson.file), 'utf8');
+    assert.ok(page.includes(`<title>${lesson.title}</title>`), lesson.file);
+    assert.ok(page.includes(`src="${lesson.script}"`), `${lesson.file} misses its script tag`);
+    assert.ok(page.includes('href="index.html"'), `${lesson.file} misses the فهرست link`);
+    const previous = lessons[position - 1];
+    if (previous) assert.ok(page.includes(`href="${previous.file}"`), `${lesson.file} misses the previous link`);
+    const following = lessons[position + 1];
+    if (following) assert.ok(page.includes(`href="${following.file}"`), `${lesson.file} misses the next link`);
+  }
 });
 
-test('rejects a lecture without a matching lesson page', async (t) => {
-  const sourceDir = await tempDirectory();
-  const outputDir = await tempDirectory();
-  t.after(() => Promise.all([rm(sourceDir, { recursive: true, force: true }), rm(outputDir, { recursive: true, force: true })]));
-  await cp(path.join(root, 'contents'), path.join(sourceDir, 'contents'), { recursive: true });
-  const manifest = JSON.parse(await readFile(path.join(root, 'course.json'), 'utf8'));
-  manifest.lectures[0].id = 'renamed-lecture';
-  await writeFile(path.join(sourceDir, 'course.json'), JSON.stringify(manifest));
+test('every course.json lecture has a matching lesson page', () => {
+  const slugs = lessons.map((lesson) => path.parse(lesson.file).name);
+  for (const lecture of course.lectures) {
+    const slug = slugs.find((candidate) => candidate.endsWith(lecture.id));
+    assert.ok(slug, `no lesson page matches lecture ${lecture.id}`);
+  }
+});
 
-  await assert.rejects(generate({ sourceDir, outputDir }), /lesson page missing for lecture renamed-lecture/);
+test('build fails when a lesson content fragment is missing', async (t) => {
+  const sourceDir = await copySourceIntoTempDirectory(t);
+  const outputDir = await mkdtemp(path.join(os.tmpdir(), 'spr-dist-'));
+  t.after(() => rm(outputDir, { recursive: true, force: true }));
+
+  const brokenLesson = lessons[0];
+  await rm(path.join(sourceDir, brokenLesson.content));
+
+  await assert.rejects(execFileAsync('python3', [path.join(sourceDir, 'build.py'), outputDir]), /missing content file/);
 });

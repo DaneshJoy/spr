@@ -1,11 +1,11 @@
 {
   "id": "statistical-pattern-recognition",
   "title": "پردازش آماری الگو",
-  "description": "آموزش پردازش آماری الگو از احتمال بیزی تا طبقه‌بندی آماری؛ با توضیح شهودی، استنتاج مرحله‌به‌مرحله، مثال عددی، نمودار و تمرین پاسخ‌دار.",
+  "description": "آموزش پردازش آماری الگو از احتمال بیزی تا طبقه‌بندی آماری.",
   "language": "fa",
   "dir": "rtl",
   "level": "کارشناسی ارشد و دکتری",
-  "category": "پردازش الگو",
+  "category": "پردازش آماری الگو",
   "tags": ["پردازش آماری الگو", "آمار", "یادگیری ماشین", "طبقه‌بندی"],
   "lectures": [
     { "id": "bayesian-foundations", "title": "مبانی استدلال بیزی", "order": 1, "durationMinutes": 0, "objectives": [], "status": "published" },

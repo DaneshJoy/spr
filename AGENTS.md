@@ -1,6 +1,6 @@
 # راهنمای مخزن دوره
 
-- محتوای نوشته‌شده: `contents/**`، `docs/**` و `course.json`.
+- محتوای نوشته‌شده: `lessons/**`، `templates/**`، `assets/**`، `index.html`، `lessons.json` و `course.json`.
 - `dist/**` خروجی تولیدشده است؛ هرگز آن را دستی ویرایش نکنید.
 - رابط فارسی و RTL-first است؛ در CSS فقط ویژگی‌های منطقی به‌کار ببرید.
 - پس از تغییر، `npm run check` را اجرا کنید.

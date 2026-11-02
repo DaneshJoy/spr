@@ -1,0 +1,102 @@
+[
+  {
+    "file": "01-bayesian-foundations.html",
+    "slug": "01-bayesian-foundations",
+    "title": "مبانی استدلال بیزی: پیشین، درست‌نمایی و پسین | پردازش آماری الگو",
+    "heading": "مبانی استدلال بیزی: پیشین، درست‌نمایی و پسین",
+    "description": "از یک مسئلهٔ واقعی شروع کن و ببین چطور داده و فرض اولیه، عدم‌قطعیت را به‌روزرسانی می‌کنند.",
+    "number": 1,
+    "content": "lessons/01-bayesian-foundations.html",
+    "script": "assets/js/lessons/01-bayesian-foundations.js"
+  },
+  {
+    "file": "02-ml-map-estimation.html",
+    "slug": "02-ml-map-estimation",
+    "title": "تخمین ML و MAP؛ انتخاب پارامتر از داده | پردازش آماری الگو",
+    "heading": "تخمین ML و MAP؛ انتخاب پارامتر از داده",
+    "description": "از مشتق لگاریتم درست‌نمایی تا اثر پیشین روی مد پسین؛ با مثال سکه و کنترل تعاملی.",
+    "number": 2,
+    "content": "lessons/02-ml-map-estimation.html",
+    "script": "assets/js/lessons/02-ml-map-estimation.js"
+  },
+  {
+    "file": "03-conditional-bayes-networks.html",
+    "slug": "03-conditional-bayes-networks",
+    "title": "قانون بیز، نرخ پایه و شبکه‌های بیزی | پردازش آماری الگو",
+    "heading": "قانون بیز، نرخ پایه و شبکه‌های بیزی",
+    "description": "یک نتیجهٔ آزمایش را با نرخ پایه تفسیر کن و سپس وابستگی چند متغیر را در شبکهٔ بیزی ببین.",
+    "number": 3,
+    "content": "lessons/03-conditional-bayes-networks.html",
+    "script": "assets/js/lessons/03-conditional-bayes-networks.js"
+  },
+  {
+    "file": "04-bayesian-decision-costs.html",
+    "slug": "04-bayesian-decision-costs",
+    "title": "تصمیم‌گیری بیزی: چرا هزینهٔ خطا آستانه را تغییر می‌دهد؟ | پردازش آماری الگو",
+    "heading": "تصمیم‌گیری بیزی: چرا هزینهٔ خطا آستانه را تغییر می‌دهد؟",
+    "description": "احتمال پسین به‌تنهایی تصمیم نیست؛ ریسک عمل‌ها را حساب کن و آستانهٔ مناسب را بر اساس هزینه‌ها به دست آور.",
+    "number": 4,
+    "content": "lessons/04-bayesian-decision-costs.html",
+    "script": "assets/js/lessons/04-bayesian-decision-costs.js"
+  },
+  {
+    "file": "05-hypothesis-testing-pvalue.html",
+    "slug": "05-hypothesis-testing-pvalue",
+    "title": "آزمون فرض، خطاهای نوع اول و دوم و p-value | پردازش آماری الگو",
+    "heading": "آزمون فرض، خطاهای نوع اول و دوم و p-value",
+    "description": "معنی‌داری آماری را با آزمون آلودگی بفهم؛ خطاها، توان آزمون و p-value را با هم اشتباه نگیر.",
+    "number": 5,
+    "content": "lessons/05-hypothesis-testing-pvalue.html",
+    "script": "assets/js/lessons/05-hypothesis-testing-pvalue.js"
+  },
+  {
+    "file": "06-threshold-roc.html",
+    "slug": "06-threshold-roc",
+    "title": "آستانهٔ تصمیم و منحنی ROC | پردازش آماری الگو",
+    "heading": "آستانهٔ تصمیم و منحنی ROC",
+    "description": "با حرکت دادن آستانه، مبادلهٔ حساسیت و مثبت کاذب را ببین و یاد بگیر نقطهٔ مناسب را با توجه به کاربرد انتخاب کنی.",
+    "number": 6,
+    "content": "lessons/06-threshold-roc.html",
+    "script": "assets/js/lessons/06-threshold-roc.js"
+  },
+  {
+    "file": "07-gaussian-covariance.html",
+    "slug": "07-gaussian-covariance",
+    "title": "توزیع گاوسی و هندسهٔ کوواریانس | پردازش آماری الگو",
+    "heading": "توزیع گاوسی و هندسهٔ کوواریانس",
+    "description": "از منحنی زنگوله‌ای تا بیضی هم‌چگالی؛ میانگین، واریانس و کوواریانس را به شکل هندسی داده وصل کن.",
+    "number": 7,
+    "content": "lessons/07-gaussian-covariance.html",
+    "script": "assets/js/lessons/07-gaussian-covariance.js"
+  },
+  {
+    "file": "08-mahalanobis-distance.html",
+    "slug": "08-mahalanobis-distance",
+    "title": "فاصلهٔ ماهالانوبیس؛ فاصله با در نظر گرفتن شکل داده | پردازش آماری الگو",
+    "heading": "فاصلهٔ ماهالانوبیس؛ فاصله با در نظر گرفتن شکل داده",
+    "description": "فاصلهٔ آماری را از فاصلهٔ خام جدا کن و ببین کوواریانس چگونه غیرعادی بودن یک نمونه را تغییر می‌دهد.",
+    "number": 8,
+    "content": "lessons/08-mahalanobis-distance.html",
+    "script": "assets/js/lessons/08-mahalanobis-distance.js"
+  },
+  {
+    "file": "09-generative-classifiers.html",
+    "slug": "09-generative-classifiers",
+    "title": "طبقه‌بندهای مولد گاوسی، LDA و QDA | پردازش آماری الگو",
+    "heading": "طبقه‌بندهای مولد گاوسی، LDA و QDA",
+    "description": "از توزیع کلاس‌شرطی تا برچسب؛ فرض‌های کوواریانس را مقایسه کن و ارزیابی بدون نشت داده را یاد بگیر.",
+    "number": 9,
+    "content": "lessons/09-generative-classifiers.html",
+    "script": "assets/js/lessons/09-generative-classifiers.js"
+  },
+  {
+    "file": "10-course-project-review.html",
+    "slug": "10-course-project-review",
+    "title": "از نظریه تا کاربرد: مینی‌پروژه و مرور | پردازش آماری الگو",
+    "heading": "از نظریه تا کاربرد: مینی‌پروژه و مرور",
+    "description": "تمام مسیر را در یک گردش‌کار ببند: مدل‌سازی، تصمیم، ارزیابی و گزارش محدودیت‌ها.",
+    "number": 10,
+    "content": "lessons/10-course-project-review.html",
+    "script": "assets/js/lessons/10-course-project-review.js"
+  }
+]
