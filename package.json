@@ -8,6 +8,7 @@
     "validate": "node scripts/validate-manifest.mjs",
     "build": "npm run validate && python3 build.py",
     "dev": "npm run build && npx --yes serve dist",
+    "package:offline": "node scripts/package-offline.mjs",
     "test": "node --test",
     "check": "npm run validate && npm run build && npm test"
   },
