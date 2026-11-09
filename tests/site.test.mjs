@@ -62,6 +62,27 @@ test('source templates and built assets use local Vazirmatn fonts', async (t) =>
   }
 });
 
+test('generated lessons use only local MathJax resources', async (t) => {
+  const outputDir = await buildIntoTempDirectory(t);
+  const mathJaxScript = 'assets/mathjax/tex-mml-chtml.js';
+  const fontDirectory = path.join(outputDir, 'assets', 'mathjax', 'fonts');
+
+  const bundle = await readFile(path.join(outputDir, ...mathJaxScript.split('/')), 'utf8');
+  assert.match(bundle, /fontURL:"assets\/mathjax\/fonts"/);
+  assert.ok((await stat(path.join(outputDir, ...mathJaxScript.split('/')))).isFile(), `missing ${mathJaxScript}`);
+  const fontUrls = [...bundle.matchAll(/\/MathJax_([A-Za-z0-9-]+\.woff)/g)].map((match) => `MathJax_${match[1]}`);
+  assert.ok(fontUrls.length > 0, 'MathJax bundle has no configured font files');
+  for (const font of new Set(fontUrls)) {
+    assert.ok((await stat(path.join(fontDirectory, font))).isFile(), `missing ${font}`);
+  }
+
+  for (const lesson of lessons) {
+    const page = await readFile(path.join(outputDir, lesson.file), 'utf8');
+    assert.ok(page.includes(`src="${mathJaxScript}"`), `${lesson.file} misses local MathJax`);
+    assert.doesNotMatch(page, /(?:https?:)?\/\//, `${lesson.file} includes a remote rendered-resource URL`);
+  }
+});
+
 test('فهرست links to every lesson and every lesson page links back to the فهرست', async (t) => {
   const outputDir = await buildIntoTempDirectory(t);
 
@@ -91,10 +112,14 @@ test('offline package has a flat static-site layout', async (t) => {
   const { stdout } = await execFileAsync('python3', ['-c', 'import sys, zipfile; print("\\n".join(zipfile.ZipFile(sys.argv[1]).namelist()))', archive]);
   const entries = stdout.trim().split('\n');
 
-  for (const file of ['index.html', ...lessons.map((lesson) => lesson.file), 'assets/css/style.css', 'assets/fonts/Vazirmatn-Regular.woff2']) {
+  for (const file of ['index.html', ...lessons.map((lesson) => lesson.file), 'assets/css/style.css', 'assets/fonts/Vazirmatn-Regular.woff2', 'assets/mathjax/tex-mml-chtml.js', 'assets/mathjax/fonts/MathJax_Main-Regular.woff']) {
     assert.ok(entries.includes(file), `missing ${file}`);
   }
   assert.ok(entries.every((entry) => !entry.startsWith('dist/')), 'ZIP entries must not have a dist/ prefix');
+  for (const lesson of lessons) {
+    const page = await execFileAsync('python3', ['-c', 'import sys, zipfile; print(zipfile.ZipFile(sys.argv[1]).read(sys.argv[2]).decode())', archive, lesson.file]);
+    assert.doesNotMatch(page.stdout, /(?:https?:)?\/\//, `${lesson.file} includes a remote rendered-resource URL`);
+  }
 });
 
 test('every course.json lecture has a matching lesson page', () => {
