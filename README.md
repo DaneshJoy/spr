@@ -15,7 +15,20 @@ npm run check
 npm run dev
 ```
 
-Offline packaging commands require a POSIX host with `npm` and `python3`; Windows hosts need equivalent shell or CMD handling.
+## بستهٔ آفلاین دانشجویی
+
+برای ساخت بستهٔ تک‌فایلی برای هر کلاس (بدون اینترنت، Node.js یا نصب چیزی):
+
+```sh
+npm ci
+npm run package:offline
+```
+
+خروجی در `offline/statistical-pattern-recognition-offline.zip` ساخته می‌شود: `index.html` در ریشهٔ بسته است و فونت وزیرمتن و MathJax (با فونت‌های فرمول) داخل خود بسته کپی می‌شوند.
+
+**راهنمای ویندوز برای دانشجو:** فایل ZIP را با راست‌کلیک و «Extract All…» کامل استخراج کنید، سپس `index.html` را در Microsoft Edge، Chrome یا Firefox باز کنید. به اینترنت، Node.js یا سرور محلی نیاز نیست؛ فرمول‌ها با MathJax محلی رندر می‌شوند.
+
+ساخت بسته به میزبان POSIX با `npm` و `python3` نیاز دارد؛ روی ویندوز از WSL استفاده کنید.
 
 نشانی سایت: https://daneshjoy.github.io/spr/
 
