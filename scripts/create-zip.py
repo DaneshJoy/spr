@@ -10,4 +10,4 @@ archive = Path(sys.argv[2])
 with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as output:
     for path in source.rglob("*"):
         if path.is_file():
-            output.write(path, path.relative_to(source))
+            output.write(path, path.relative_to(source).as_posix())
