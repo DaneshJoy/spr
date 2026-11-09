@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { cp, mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -47,6 +47,21 @@ test('builds a flat dist with the فهرست, all lesson pages, assets, and mani
   }
 });
 
+test('source templates and built assets use local Vazirmatn fonts', async (t) => {
+  for (const source of ['index.html', 'templates/layout.html']) {
+    const html = await readFile(path.join(root, source), 'utf8');
+    assert.doesNotMatch(html, /fonts\.(googleapis|gstatic)\.com/);
+  }
+
+  const outputDir = await buildIntoTempDirectory(t);
+  const stylesheet = await readFile(path.join(outputDir, 'assets', 'css', 'style.css'), 'utf8');
+  const fontUrls = [...stylesheet.matchAll(/url\(["']?\.\.\/fonts\/([^"')]+\.woff2)["']?\)/g)].map((match) => match[1]);
+  assert.ok(fontUrls.length > 0, 'stylesheet has no local WOFF2 font URL');
+  for (const font of fontUrls) {
+    assert.ok((await stat(path.join(outputDir, 'assets', 'fonts', font))).isFile(), `missing ${font}`);
+  }
+});
+
 test('فهرست links to every lesson and every lesson page links back to the فهرست', async (t) => {
   const outputDir = await buildIntoTempDirectory(t);
 
@@ -65,6 +80,21 @@ test('فهرست links to every lesson and every lesson page links back to the �
     const following = lessons[position + 1];
     if (following) assert.ok(page.includes(`href="${following.file}"`), `${lesson.file} misses the next link`);
   }
+});
+
+test('offline package has a flat static-site layout', async (t) => {
+  const outputDir = await buildIntoTempDirectory(t);
+  const archiveDir = await mkdtemp(path.join(os.tmpdir(), 'spr-zip-'));
+  t.after(() => rm(archiveDir, { recursive: true, force: true }));
+  const archive = path.join(archiveDir, 'course.zip');
+  await execFileAsync('python3', [path.join(root, 'scripts', 'create-zip.py'), outputDir, archive]);
+  const { stdout } = await execFileAsync('python3', ['-c', 'import sys, zipfile; print("\\n".join(zipfile.ZipFile(sys.argv[1]).namelist()))', archive]);
+  const entries = stdout.trim().split('\n');
+
+  for (const file of ['index.html', ...lessons.map((lesson) => lesson.file), 'assets/css/style.css', 'assets/fonts/Vazirmatn-Regular.woff2']) {
+    assert.ok(entries.includes(file), `missing ${file}`);
+  }
+  assert.ok(entries.every((entry) => !entry.startsWith('dist/')), 'ZIP entries must not have a dist/ prefix');
 });
 
 test('every course.json lecture has a matching lesson page', () => {
