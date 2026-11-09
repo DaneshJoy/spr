@@ -65,10 +65,10 @@ test('source templates and built assets use local Vazirmatn fonts', async (t) =>
 test('generated lessons use only local MathJax resources', async (t) => {
   const outputDir = await buildIntoTempDirectory(t);
   const mathJaxScript = 'assets/mathjax/tex-mml-chtml.js';
-  const fontDirectory = path.join(outputDir, 'assets', 'mathjax', 'fonts');
+  const fontDirectory = path.join(outputDir, 'assets', 'mathjax', 'output', 'chtml', 'fonts', 'woff-v2');
 
   const bundle = await readFile(path.join(outputDir, ...mathJaxScript.split('/')), 'utf8');
-  assert.match(bundle, /fontURL:"assets\/mathjax\/fonts"/);
+  assert.match(bundle, /Package\.resolvePath\("output\/chtml\/fonts\/woff-v2",!1\)/);
   assert.ok((await stat(path.join(outputDir, ...mathJaxScript.split('/')))).isFile(), `missing ${mathJaxScript}`);
   const fontUrls = [...bundle.matchAll(/\/MathJax_([A-Za-z0-9-]+\.woff)/g)].map((match) => `MathJax_${match[1]}`);
   assert.ok(fontUrls.length > 0, 'MathJax bundle has no configured font files');
@@ -112,7 +112,7 @@ test('offline package has a flat static-site layout', async (t) => {
   const { stdout } = await execFileAsync('python3', ['-c', 'import sys, zipfile; print("\\n".join(zipfile.ZipFile(sys.argv[1]).namelist()))', archive]);
   const entries = stdout.trim().split('\n');
 
-  for (const file of ['index.html', ...lessons.map((lesson) => lesson.file), 'assets/css/style.css', 'assets/fonts/Vazirmatn-Regular.woff2', 'assets/mathjax/tex-mml-chtml.js', 'assets/mathjax/fonts/MathJax_Main-Regular.woff']) {
+  for (const file of ['index.html', ...lessons.map((lesson) => lesson.file), 'assets/css/style.css', 'assets/fonts/Vazirmatn-Regular.woff2', 'assets/mathjax/tex-mml-chtml.js', 'assets/mathjax/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff']) {
     assert.ok(entries.includes(file), `missing ${file}`);
   }
   assert.ok(entries.every((entry) => !entry.startsWith('dist/')), 'ZIP entries must not have a dist/ prefix');
