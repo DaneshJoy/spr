@@ -115,6 +115,51 @@ test('lessons have bottom tab navigation above the lesson navigation', async (t)
   }
 });
 
+test('built lesson runs the bottom tab navigation in a DOM', async (t) => {
+  const outputDir = await buildIntoTempDirectory(t);
+  const { Window } = await import('happy-dom');
+  const js = await readFile(path.join(outputDir, 'assets', 'js', 'main.js'), 'utf8');
+  const load = async (file) => {
+    const window = new Window({
+      url: `http://localhost/${file}`,
+      settings: { disableJavaScriptFileLoading: true, disableCSSFileLoading: true },
+    });
+    window.document.write(await readFile(path.join(outputDir, file), 'utf8'));
+    window.Element.prototype.scrollIntoView = () => {};
+    window.eval(js);
+    return window;
+  };
+
+  const window = await load(lessons[0].file);
+  const doc = window.document;
+  const nav = doc.querySelector('.tab-nav');
+  const [prev, next] = nav.querySelectorAll('button');
+  const selected = () => [...doc.querySelectorAll('.tab')].findIndex((x) => x.getAttribute('aria-selected') === 'true');
+  const tabCount = doc.querySelectorAll('.tab').length;
+
+  assert.ok(nav.nextElementSibling === doc.querySelector('.lesson-nav'), 'tab nav must sit directly above the lesson nav');
+  assert.deepEqual([prev.textContent, next.textContent], ['بخش قبلی', 'بخش بعدی']);
+  assert.equal(selected(), 0);
+  assert.equal(prev.disabled, true, 'prev must be disabled on the first tab');
+  assert.equal(next.disabled, false);
+
+  next.click();
+  assert.equal(selected(), 1);
+  assert.equal(doc.querySelector('.panel.active').id, 'p2');
+  assert.equal(prev.disabled, false);
+
+  for (let i = 1; i < tabCount - 1; i++) next.click();
+  assert.equal(selected(), tabCount - 1);
+  assert.equal(next.disabled, true, 'next must be disabled on the last tab');
+
+  prev.click();
+  assert.equal(selected(), tabCount - 2);
+  assert.equal(next.disabled, false);
+
+  const indexWindow = await load('index.html');
+  assert.equal(indexWindow.document.querySelector('.tab-nav'), null, 'index must not get a tab nav');
+});
+
 test('offline package has a flat static-site layout', async (t) => {
   const outputDir = await buildIntoTempDirectory(t);
   const archiveDir = await mkdtemp(path.join(os.tmpdir(), 'spr-zip-'));
