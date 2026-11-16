@@ -103,6 +103,18 @@ test('فهرست links to every lesson and every lesson page links back to the �
   }
 });
 
+test('lessons have bottom tab navigation above the lesson navigation', async (t) => {
+  const outputDir = await buildIntoTempDirectory(t);
+  const js = await readFile(path.join(outputDir, 'assets', 'js', 'main.js'), 'utf8');
+  const css = await readFile(path.join(outputDir, 'assets', 'css', 'style.css'), 'utf8');
+
+  assert.ok(js.includes("'بخش قبلی'") && js.includes("'بخش بعدی'"), 'main.js misses the بخش قبلی/بخش بعدی buttons');
+  assert.ok(js.includes("nv.before(tn)"), 'tab navigation is not inserted above the lesson navigation');
+  for (const needle of ['.tab-nav', '.tab-nav .btn:disabled', '.tabs{scroll-margin-top']) {
+    assert.ok(css.includes(needle), `style.css misses ${needle}`);
+  }
+});
+
 test('offline package has a flat static-site layout', async (t) => {
   const outputDir = await buildIntoTempDirectory(t);
   const archiveDir = await mkdtemp(path.join(os.tmpdir(), 'spr-zip-'));
