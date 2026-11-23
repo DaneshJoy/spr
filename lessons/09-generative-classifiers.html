@@ -20,7 +20,7 @@
 <p>طبقه‌بند مولد (Generative Classifier) راه مولد است: چگالی کلاس-شرطی \(p(x\mid C_k)\) («دادهٔ کلاس \(C_k\) چه شکلی است») و پیشین کلاس (Class Prior) \(P(C_k)\) («هر کلاس چقدر محتمل است») را مدل می‌کند و سپس با خط‌کش بیز (Bayes' Rule) به پسین (Posterior) می‌رسد.</p>
 <div class="grid3">
 <div class="card"><h3>۱. چگالی کلاس-شرطی</h3><p>شکل پراکندگی ویژگی‌های هر کلاس را مدل کن؛ مثلاً با توزیعی گاوسی (Gaussian) با میانگین و کوواریانس خودش.</p><div class="metric">p(x|Cₖ)</div></div>
-<div class="card"><h3>۲. پیشین کلاس</h3><p>سهم هر کلاس از جمعیت؛ اگر ۷۰٪ نمونه‌ها سیب بودند، \(P(C_{\text{سیب}})=0.7\).</p><div class="metric">P(Cₖ)</div></div>
+<div class="card"><h3>۲. پیشین کلاس</h3><p>سهم هر کلاس از جمعیت؛ اگر ۷۰٪ نمونه‌ها سیب بودند (کلاس \(C_1\))، \(P(C_1)=0.7\).</p><div class="metric">P(Cₖ)</div></div>
 <div class="card"><h3>۳. تصمیم با پسین</h3><p>با قانون بیز پسین هر کلاس را بساز و بیشترین را انتخاب کن.</p><div class="metric">argmaxₖ P(Cₖ|x)</div></div>
 </div>
 <div class="formula">\[P(C_k\mid x)=\frac{p(x\mid C_k)\,P(C_k)}{\sum_j p(x\mid C_j)\,P(C_j)},\qquad\hat C=\arg\max_k\; p(x\mid C_k)\,P(C_k)\]</div>

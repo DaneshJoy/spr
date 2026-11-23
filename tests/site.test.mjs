@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { Window } from 'happy-dom';
 
 const execFileAsync = promisify(execFile);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -13,6 +14,41 @@ const buildScript = path.join(root, 'build.py');
 
 const lessons = JSON.parse(await readFile(path.join(root, 'lessons.json'), 'utf8'));
 const course = JSON.parse(await readFile(path.join(root, 'course.json'), 'utf8'));
+
+function extractMathDelimiters(source) {
+  const math = [];
+  const isActiveDollar = (index) => {
+    let backslashes = 0;
+    while (source[index - backslashes - 1] === '\\') backslashes++;
+    return backslashes % 2 === 0;
+  };
+  for (let index = 0; index < source.length;) {
+    const opener = source.startsWith('\\(', index) ? '\\('
+      : source.startsWith('\\[', index) ? '\\['
+        : source[index] === '$' && isActiveDollar(index) ? (source.startsWith('$$', index) ? '$$' : '$')
+          : null;
+    if (!opener) {
+      index++;
+      continue;
+    }
+    const close = opener === '\\(' ? '\\)' : opener === '\\[' ? '\\]' : opener;
+    let end = index + opener.length;
+    while ((end = source.indexOf(close, end)) !== -1) {
+      if (!opener.startsWith('$') || (
+        isActiveDollar(end) &&
+        (opener === '$$' || (source[end - 1] !== '$' && source[end + 1] !== '$'))
+      )) break;
+      end += close.length;
+    }
+    if (end === -1) {
+      index += opener.length;
+      continue;
+    }
+    math.push({ text: source.slice(index + opener.length, end), delimiter: opener });
+    index = end + close.length;
+  }
+  return math;
+}
 
 async function buildIntoTempDirectory(t) {
   const outputDir = await mkdtemp(path.join(os.tmpdir(), 'spr-dist-'));
@@ -184,6 +220,32 @@ test('every course.json lecture has a matching lesson page', () => {
   for (const lecture of course.lectures) {
     const slug = slugs.find((candidate) => candidate.endsWith(lecture.id));
     assert.ok(slug, `no lesson page matches lecture ${lecture.id}`);
+  }
+});
+
+test('MathJax dollar delimiters ignore escaped dollars and allow even-backslash dollars', () => {
+  const source = String.raw`\$متن فارسی $a+1$ and \\$b+1$ and $$c+2$$`;
+  const math = extractMathDelimiters(source).map(({ text }) => text);
+
+  assert.deepEqual(math, ['a+1', 'b+1', 'c+2']);
+});
+
+test('authored lessons contain no Persian letters inside MathJax delimiters', async () => {
+  const lessonFiles = (await readdir(path.join(root, 'lessons')))
+    .filter((file) => file.endsWith('.html'));
+  const persianLetters = /[\u0621-\u064A\u067E\u0686\u0698\u06A9\u06AF\u06CC]/;
+
+  for (const file of lessonFiles) {
+    const html = await readFile(path.join(root, 'lessons', file), 'utf8');
+    const window = new Window();
+    window.document.body.innerHTML = html;
+    for (const formula of window.document.querySelectorAll('.formula')) {
+      assert.doesNotMatch(formula.textContent, persianLetters, `${file} contains Persian prose in .formula`);
+    }
+    window.happyDOM.abort();
+    for (const { text, delimiter } of extractMathDelimiters(html)) {
+      assert.doesNotMatch(text, persianLetters, `${file} contains Persian text in math: ${delimiter}${text}${delimiter}`);
+    }
   }
 });
 
