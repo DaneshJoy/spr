@@ -60,13 +60,13 @@
     s+='<text x="'+(X(z)+6).toFixed(1)+'" y="'+(MT+16)+'" direction="ltr" fill="'+text+'" font-size="13" font-weight="700">z*='+z.toFixed(2)+'</text>';
     s+='<rect x="'+(H-MR-152)+'" y="'+(MT-4)+'" width="148" height="88" rx="10" fill="none" stroke="'+line+'"/>';
     s+='<line x1="'+(H-MR-140)+'" y1="'+(MT+12)+'" x2="'+(H-MR-114)+'" y2="'+(MT+12)+'" stroke="'+B+'" stroke-width="2.5"/>';
-    s+='<text x="'+(H-MR-106)+'" y="'+(MT+16)+'" fill="'+muted+'" font-size="12">فرض صفر H₀</text>';
+    s+='<text x="'+(H-MR-106)+'" y="'+(MT+16)+'" direction="ltr" fill="'+muted+'" font-size="12">فرض صفر H₀</text>';
     s+='<line x1="'+(H-MR-140)+'" y1="'+(MT+32)+'" x2="'+(H-MR-114)+'" y2="'+(MT+32)+'" stroke="'+A+'" stroke-width="2.5"/>';
-    s+='<text x="'+(H-MR-106)+'" y="'+(MT+36)+'" fill="'+muted+'" font-size="12">فرض جانشین H₁</text>';
+    s+='<text x="'+(H-MR-106)+'" y="'+(MT+36)+'" direction="ltr" fill="'+muted+'" font-size="12">فرض جانشین H₁</text>';
     s+='<rect x="'+(H-MR-140)+'" y="'+(MT+46)+'" width="26" height="11" fill="'+bad+'" fill-opacity=".45" stroke="none"/>';
-    s+='<text x="'+(H-MR-106)+'" y="'+(MT+56)+'" fill="'+muted+'" font-size="12">ناحیهٔ رد (α)</text>';
+    s+='<text x="'+(H-MR-106)+'" y="'+(MT+56)+'" direction="ltr" fill="'+muted+'" font-size="12">ناحیهٔ رد (α)</text>';
     s+='<rect x="'+(H-MR-140)+'" y="'+(MT+66)+'" width="26" height="11" fill="'+warn+'" fill-opacity=".45" stroke="none"/>';
-    s+='<text x="'+(H-MR-106)+'" y="'+(MT+76)+'" fill="'+muted+'" font-size="12">خطای نوع دوم (β)</text>';
+    s+='<text x="'+(H-MR-106)+'" y="'+(MT+76)+'" direction="ltr" fill="'+muted+'" font-size="12">خطای نوع دوم (β)</text>';
     svg.innerHTML=s;
   };
   var upd=function(){
