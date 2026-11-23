@@ -4,7 +4,7 @@
   var rho=g('l8-rho'),rhoV=g('l8-rhov'),qx=g('l8-qx'),qxV=g('l8-qxv'),qy=g('l8-qy'),qyV=g('l8-qyv');
   var eu=g('l8-eu'),mh=g('l8-mh'),kv=g('l8-k'),expl=g('l8-expl');
   var svg=g('l8-lab');
-  var SX=1.6,SY=1,CX=320,CY=230,S=46;
+  var SX=1.6,SY=1,CX=320,CY=180,S=32;
   // deterministic scatter: fixed-seed LCG + Box-Muller (no Math.random)
   var seed=20260808;
   var lcg=function(){
@@ -50,9 +50,9 @@
     var WARN=cs.getPropertyValue('--warn').trim()||'#b76e00';
     var BAD=cs.getPropertyValue('--bad').trim()||'#b42335';
     var a=SX*SX,b=SY*SY,c=v.r*SX*SY;
-    var s='<rect x="0" y="0" width="640" height="460" fill="none"/>';
+    var s='<rect x="0" y="0" width="640" height="360" fill="none"/>';
     // axes through mu
-    s+='<line x1="'+CX+'" y1="20" x2="'+CX+'" y2="440" stroke="'+LINE+'"/>';
+    s+='<line x1="'+CX+'" y1="20" x2="'+CX+'" y2="340" stroke="'+LINE+'"/>';
     s+='<line x1="30" y1="'+CY+'" x2="610" y2="'+CY+'" stroke="'+LINE+'"/>';
     s+='<text x="600" y="'+(CY-8)+'" direction="ltr" text-anchor="end" fill="'+MUT+'" font-size="12">x</text>';
     s+='<text x="'+(CX+8)+'" y="30" direction="ltr" fill="'+MUT+'" font-size="12">y</text>';
@@ -81,11 +81,11 @@
     // legend
     s+='<rect x="14" y="14" width="168" height="66" rx="10" fill="none" stroke="'+LINE+'"/>';
     s+='<circle cx="30" cy="32" r="3.5" fill="'+B+'" opacity=".55"/>';
-    s+='<text x="42" y="36" fill="'+MUT+'" font-size="12">نقاط داده</text>';
+    s+='<text x="42" y="36" direction="ltr" fill="'+MUT+'" font-size="12">نقاط داده</text>';
     s+='<line x1="22" y1="52" x2="40" y2="52" stroke="'+A+'" stroke-width="2.5"/>';
-    s+='<text x="48" y="56" fill="'+MUT+'" font-size="12">بیضی‌های ۱σ/۲σ/۳σ</text>';
+    s+='<text x="48" y="56" direction="ltr" fill="'+MUT+'" font-size="12">بیضی‌های ۱σ/۲σ/۳σ</text>';
     s+='<circle cx="30" cy="70" r="5" fill="'+BAD+'"/>';
-    s+='<text x="42" y="74" fill="'+MUT+'" font-size="12">نقطهٔ کوئری</text>';
+    s+='<text x="42" y="74" direction="ltr" fill="'+MUT+'" font-size="12">نقطهٔ کوئری</text>';
     svg.innerHTML=s;
   };
   var upd=function(){

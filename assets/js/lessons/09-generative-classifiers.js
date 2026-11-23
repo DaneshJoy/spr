@@ -77,8 +77,8 @@
         +'<text x="'+(ML-8)+'" y="'+(v+4).toFixed(1)+'" direction="ltr" text-anchor="end" fill="'+muted+'" font-size="12">'+t+'</text>';}
     s+='<text x="'+(ML+PW/2)+'" y="'+(VH-8)+'" text-anchor="middle" direction="ltr" fill="'+muted+'" font-size="13">x\u2081</text>';
     s+='<text x="14" y="'+(MT+PH/2)+'" direction="ltr" fill="'+muted+'" font-size="13">x\u2082</text>';
-    s+='<circle cx="'+(ML+16)+'" cy="'+(MT+12)+'" r="4" fill="'+A+'"/><text x="'+(ML+26)+'" y="'+(MT+16)+'" fill="'+muted+'" font-size="12">کلاس الف</text>';
-    s+='<circle cx="'+(ML+104)+'" cy="'+(MT+12)+'" r="4" fill="'+B+'"/><text x="'+(ML+114)+'" y="'+(MT+16)+'" fill="'+muted+'" font-size="12">کلاس ب</text>';
+    s+='<circle cx="'+(ML+16)+'" cy="'+(MT+12)+'" r="4" fill="'+A+'"/><text x="'+(ML+26)+'" y="'+(MT+16)+'" direction="ltr" fill="'+muted+'" font-size="12">کلاس الف</text>';
+    s+='<circle cx="'+(ML+104)+'" cy="'+(MT+12)+'" r="4" fill="'+B+'"/><text x="'+(ML+114)+'" y="'+(MT+16)+'" direction="ltr" fill="'+muted+'" font-size="12">کلاس ب</text>';
     for(var p,i2=0;i2<pts.length;i2++){p=pts[i2];
       s+='<circle cx="'+px(p.x).toFixed(1)+'" cy="'+py(p.y).toFixed(1)+'" r="3.4" fill="'+(p.c?B:A)+'" fill-opacity="0.85"/>';}
     if(cur==='lda')s+=ell(muA,covP,A)+ell(muB,covP,B);

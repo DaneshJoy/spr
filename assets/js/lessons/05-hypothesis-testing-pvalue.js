@@ -3,7 +3,7 @@
   var g=function(id){return document.getElementById(id)};
   var svg=g('l5-lab'),dS=g('l5-d'),aS=g('l5-alpha'),dv=g('l5-dv'),av=g('l5-alphav');
   var zOut=g('l5-z'),bOut=g('l5-beta'),pOut=g('l5-power'),expl=g('l5-expl');
-  var H=720,W=420,ML=52,MR=16,MT=30,MB=52,PW=H-ML-MR,PH=W-MT-MB;
+  var H=720,W=320,ML=52,MR=16,MT=30,MB=42,PW=H-ML-MR,PH=W-MT-MB;
   var XMIN=-4,XMAX=7,YMAX=.42,N=200,SQ2=Math.sqrt(2),SQ2PI=Math.sqrt(2*Math.PI);
   var erf=function(x){
     var s=x<0?-1:1;x=Math.abs(x);

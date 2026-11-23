@@ -3,7 +3,7 @@
   var g=function(id){return document.getElementById(id)};
   var heads=g('heads'),prior=g('prior'),hv=g('hv'),av=g('av'),ml=g('ml'),map=g('map'),expl=g('expl');
   var svg=g('l2chart');
-  var N=10,H=720,W=420,ML=52,MR=16,MT=30,MB=52,PW=H-ML-MR,PH=W-MT-MB;
+  var N=10,H=720,W=320,ML=52,MR=16,MT=30,MB=42,PW=H-ML-MR,PH=W-MT-MB;
   var vals=function(){
     var h=heads?+heads.value:7,a=prior?+prior.value:2;
     var al=a+h,be=a+N-h;
@@ -64,9 +64,9 @@
     s+=marker(v.postMode,'mk-map','MAP');
     s+='<rect x="'+(H-MR-150)+'" y="'+(MT-2)+'" width="146" height="52" rx="10" fill="none" stroke="'+line+'"/>';
     s+='<line x1="'+(H-MR-138)+'" y1="'+(MT+12)+'" x2="'+(H-MR-112)+'" y2="'+(MT+12)+'" stroke="'+B+'" stroke-width="2.5"/>';
-    s+='<text x="'+(H-MR-104)+'" y="'+(MT+16)+'" fill="'+muted+'">درست‌نمایی</text>';
+    s+='<text x="'+(H-MR-104)+'" y="'+(MT+16)+'" direction="ltr" fill="'+muted+'">درست‌نمایی</text>';
     s+='<line x1="'+(H-MR-138)+'" y1="'+(MT+36)+'" x2="'+(H-MR-112)+'" y2="'+(MT+36)+'" stroke="'+A+'" stroke-width="2.5"/>';
-    s+='<text x="'+(H-MR-104)+'" y="'+(MT+40)+'" fill="'+muted+'">پسین</text>';
+    s+='<text x="'+(H-MR-104)+'" y="'+(MT+40)+'" direction="ltr" fill="'+muted+'">پسین</text>';
     svg.innerHTML=s;
   };
   var upd=function(){

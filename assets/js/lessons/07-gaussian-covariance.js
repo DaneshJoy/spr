@@ -3,7 +3,7 @@
   var g=function(id){return document.getElementById(id)};
   var svg=g('l7-lab'),sx=g('l7-sx'),sy=g('l7-sy'),rho=g('l7-rho'),
       thEl=g('l7-theta'),r1El=g('l7-r1'),r2El=g('l7-r2'),expl=g('l7-expl');
-  var W=640,H=420,CX=320,CY=210,K=46,NPTS=180;
+  var W=640,H=320,CX=320,CY=160,K=22,NPTS=180;
   // deterministic sample: fixed-seed LCG -> Box-Muller, computed once so points never jump between updates
   var seed=123456789;
   var rand=function(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};

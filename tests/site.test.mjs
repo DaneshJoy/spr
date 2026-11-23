@@ -249,6 +249,87 @@ test('authored lessons contain no Persian letters inside MathJax delimiters', as
   }
 });
 
+test('requested interactive plot legends and readouts use the intended directions and layout', async () => {
+  const source = async (relativePath) => readFile(path.join(root, relativePath), 'utf8');
+  const stylesheet = await source('assets/css/style.css');
+  assert.match(stylesheet, /@media\(max-width:720px\).*?\.grid,\.grid3\{grid-template-columns:1fr\}/);
+  const lesson3 = new Window();
+  lesson3.document.body.innerHTML = await source('lessons/03-conditional-bayes-networks.html');
+  const lesson3Cards = lesson3.document.querySelector('#b-post').parentElement.parentElement;
+  assert.equal(lesson3Cards.classList.contains('grid3'), true, 'lesson 3 readouts should share one row');
+
+  for (const [file, chartId, maxHeight] of [
+    ['lessons/02-ml-map-estimation.html', 'l2chart', 360],
+    ['lessons/05-hypothesis-testing-pvalue.html', 'l5-lab', 360],
+    ['lessons/07-gaussian-covariance.html', 'l7-lab', 340],
+    ['lessons/08-mahalanobis-distance.html', 'l8-lab', 360],
+  ]) {
+    const doc = new Window();
+    doc.document.body.innerHTML = await source(file);
+    const svg = doc.document.getElementById(chartId);
+    assert.ok(Number(svg.getAttribute('viewBox').split(' ')[3]) <= maxHeight, `${file} chart should be shorter`);
+    if (chartId === 'l7-lab') {
+      assert.ok(svg.previousElementSibling?.classList.contains('grid3') === false);
+      assert.equal(svg.nextElementSibling?.classList.contains('grid3'), true, 'lesson 7 readouts should be below plot');
+    }
+    if (chartId === 'l8-lab') {
+      assert.equal(svg.previousElementSibling?.classList.contains('grid3'), false);
+      assert.equal(svg.nextElementSibling?.classList.contains('grid3'), true, 'lesson 8 readouts should be below plot');
+    }
+    doc.happyDOM.abort();
+  }
+  lesson3.happyDOM.abort();
+
+  for (const [file, fragments] of [
+    ['assets/js/lessons/02-ml-map-estimation.js', ['درست‌نمایی', 'پسین']],
+    ['assets/js/lessons/06-threshold-roc.js', ['مثبت‌ها (بیمار)', 'منفی‌ها (سالم)']],
+    ['assets/js/lessons/08-mahalanobis-distance.js', ['نقاط داده', 'بیضی‌های ۱σ/۲σ/۳σ', 'نقطهٔ کوئری']],
+    ['assets/js/lessons/09-generative-classifiers.js', ['کلاس الف', 'کلاس ب']],
+  ]) {
+    const js = await source(file);
+    for (const legend of fragments) {
+      const index = js.indexOf(legend);
+      assert.notEqual(index, -1, `${file} legend ${legend} should exist`);
+      const textTag = js.lastIndexOf('<text', index);
+      assert.ok(js.slice(textTag, index).includes('direction="ltr"'), `${file} legend ${legend} should be LTR`);
+    }
+  }
+});
+
+test('lesson 7 scatter points and ellipses stay inside the plot at slider extremes', async () => {
+  const window = new Window();
+  window.document.body.innerHTML = await readFile(path.join(root, 'lessons/07-gaussian-covariance.html'), 'utf8');
+  window.eval(await readFile(path.join(root, 'assets/js/lessons/07-gaussian-covariance.js'), 'utf8'));
+  const svg = window.document.getElementById('l7-lab');
+  const [width, height] = svg.getAttribute('viewBox').split(' ').slice(2).map(Number);
+
+  for (const sx of ['0.5', '2']) {
+    for (const sy of ['0.5', '2']) {
+      for (const rho of ['-0.95', '0.95']) {
+        for (const [id, value] of [['l7-sx', sx], ['l7-sy', sy], ['l7-rho', rho]]) {
+          const control = window.document.getElementById(id);
+          control.value = value;
+          control.dispatchEvent(new window.Event('input'));
+        }
+        for (const point of svg.querySelectorAll('circle')) {
+          const x = Number(point.getAttribute('cx')), y = Number(point.getAttribute('cy')), r = Number(point.getAttribute('r'));
+          assert.ok(x - r >= 0 && x + r <= width && y - r >= 0 && y + r <= height, `scatter point clipped at sx=${sx}, sy=${sy}, rho=${rho}`);
+        }
+        for (const ellipse of svg.querySelectorAll('ellipse')) {
+          const rx = Number(ellipse.getAttribute('rx')), ry = Number(ellipse.getAttribute('ry'));
+          const [angle] = ellipse.getAttribute('transform').match(/rotate\(([-\d.]+)/).slice(1).map(Number);
+          const radians = angle * Math.PI / 180;
+          const halfWidth = Math.hypot(rx * Math.cos(radians), ry * Math.sin(radians));
+          const halfHeight = Math.hypot(rx * Math.sin(radians), ry * Math.cos(radians));
+          const cx = Number(ellipse.getAttribute('cx')), cy = Number(ellipse.getAttribute('cy'));
+          assert.ok(cx - halfWidth >= 0 && cx + halfWidth <= width && cy - halfHeight >= 0 && cy + halfHeight <= height, `ellipse clipped at sx=${sx}, sy=${sy}, rho=${rho}`);
+        }
+      }
+    }
+  }
+  window.happyDOM.abort();
+});
+
 test('build fails when a lesson content fragment is missing', async (t) => {
   const sourceDir = await copySourceIntoTempDirectory(t);
   const outputDir = await mkdtemp(path.join(os.tmpdir(), 'spr-dist-'));

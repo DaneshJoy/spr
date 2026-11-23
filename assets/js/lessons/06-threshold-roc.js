@@ -48,9 +48,9 @@
     var lx0=W-MR-198;
     s+='<rect x="'+lx0+'" y="'+(MT-2)+'" width="196" height="66" rx="10" fill="none" stroke="'+line+'"/>';
     s+='<line x1="'+(lx0+10)+'" y1="'+(MT+12)+'" x2="'+(lx0+36)+'" y2="'+(MT+12)+'" stroke="'+A+'" stroke-width="2.5"/>';
-    s+='<text x="'+(lx0+42)+'" y="'+(MT+16)+'" fill="'+muted+'" font-size="12">مثبت‌ها (بیمار)</text>';
+    s+='<text x="'+(lx0+42)+'" y="'+(MT+16)+'" direction="ltr" fill="'+muted+'" font-size="12">مثبت‌ها (بیمار)</text>';
     s+='<line x1="'+(lx0+10)+'" y1="'+(MT+34)+'" x2="'+(lx0+36)+'" y2="'+(MT+34)+'" stroke="'+B+'" stroke-width="2.5"/>';
-    s+='<text x="'+(lx0+42)+'" y="'+(MT+38)+'" fill="'+muted+'" font-size="12">منفی‌ها (سالم)</text>';
+    s+='<text x="'+(lx0+42)+'" y="'+(MT+38)+'" direction="ltr" fill="'+muted+'" font-size="12">منفی‌ها (سالم)</text>';
     s+='<rect x="'+(lx0+10)+'" y="'+(MT+50)+'" width="14" height="10" fill="'+warn+'" fill-opacity=".3"/>';
     s+='<rect x="'+(lx0+34)+'" y="'+(MT+50)+'" width="14" height="10" fill="'+bad+'" fill-opacity=".3"/>';
     s+='<text x="'+(lx0+56)+'" y="'+(MT+59)+'" direction="ltr" fill="'+muted+'" font-size="12">FP / FN</text>';
