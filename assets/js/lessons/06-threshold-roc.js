@@ -59,7 +59,7 @@
   // ROC chart: curve of (FPR(τ),TPR(τ)) + chance diagonal + moving operating point
   var renderRoc=function(t){
     if(!roc)return;
-    var W=420,H=420,ML=46,MR=18,MT=16,MB=44,PW=W-ML-MR,PH=H-MT-MB;
+    var W=420,H=336,ML=72,MR=72,MT=16,MB=44,PW=W-ML-MR,PH=H-MT-MB;
     var A=css('--a','#087f8c'),bad=css('--bad','#b42335'),line=css('--line','#d8e3ea'),muted=css('--muted','#536b7a');
     var X=function(f){return ML+f*PW},Y=function(p){return MT+(1-p)*PH};
     var s='<line x1="'+ML+'" y1="'+(MT+PH)+'" x2="'+(ML+PW)+'" y2="'+(MT+PH)+'" stroke="'+line+'"/>';

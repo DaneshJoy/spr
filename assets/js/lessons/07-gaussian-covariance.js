@@ -62,12 +62,12 @@
     s+='<line x1="'+(CX-6)+'" y1="'+CY+'" x2="'+(CX+6)+'" y2="'+CY+'" stroke="'+muted+'" stroke-width="1.5"/>';
     s+='<line x1="'+CX+'" y1="'+(CY-6)+'" x2="'+CX+'" y2="'+(CY+6)+'" stroke="'+muted+'" stroke-width="1.5"/>';
     s+='<rect x="'+(W-166)+'" y="10" width="156" height="66" rx="10" fill="none" stroke="'+line+'"/>';
-    s+='<circle cx="'+(W-150)+'" cy="27" r="3" fill="'+B+'" opacity=".5"/>';
-    s+='<text x="'+(W-140)+'" y="31" fill="'+muted+'" font-size="13">نمونه‌ها</text>';
-    s+='<line x1="'+(W-156)+'" y1="48" x2="'+(W-128)+'" y2="48" stroke="'+A+'" stroke-width="2.5"/>';
-    s+='<text x="'+(W-120)+'" y="52" fill="'+muted+'" font-size="13">بیضی ۱σ</text>';
-    s+='<line x1="'+(W-156)+'" y1="66" x2="'+(W-128)+'" y2="66" stroke="'+B+'" stroke-width="2.5"/>';
-    s+='<text x="'+(W-120)+'" y="70" fill="'+muted+'" font-size="13">بیضی ۲σ</text>';
+    s+='<circle cx="'+(W-18)+'" cy="27" r="3" fill="'+B+'" opacity=".5"/>';
+    s+='<text x="'+(W-48)+'" y="31" direction="rtl" text-anchor="end" fill="'+muted+'" font-size="13">نمونه‌ها</text>';
+    s+='<line x1="'+(W-42)+'" y1="48" x2="'+(W-18)+'" y2="48" stroke="'+A+'" stroke-width="2.5"/>';
+    s+='<text x="'+(W-48)+'" y="52" direction="rtl" text-anchor="end" fill="'+muted+'" font-size="13">بیضی ۱σ</text>';
+    s+='<line x1="'+(W-42)+'" y1="66" x2="'+(W-18)+'" y2="66" stroke="'+B+'" stroke-width="2.5"/>';
+    s+='<text x="'+(W-48)+'" y="70" direction="rtl" text-anchor="end" fill="'+muted+'" font-size="13">بیضی ۲σ</text>';
     svg.innerHTML=s;
   };
   var upd=function(){

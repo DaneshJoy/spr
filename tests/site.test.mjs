@@ -330,6 +330,55 @@ test('lesson 7 scatter points and ellipses stay inside the plot at slider extrem
   window.happyDOM.abort();
 });
 
+test('lesson 7 legend is RTL and lesson 6 ROC plot is shorter with square axes', async () => {
+  const window = new Window();
+  window.document.body.innerHTML = await readFile(path.join(root, 'lessons/07-gaussian-covariance.html'), 'utf8');
+  window.eval(await readFile(path.join(root, 'assets/js/lessons/07-gaussian-covariance.js'), 'utf8'));
+  const legendTexts = ['نمونه‌ها', 'بیضی ۱σ', 'بیضی ۲σ'];
+  for (const [index, label] of legendTexts.entries()) {
+    const text = [...window.document.querySelectorAll('#l7-lab text')].find((item) => item.textContent === label);
+    assert.ok(text, `missing lesson 7 legend ${label}`);
+    assert.equal(text.getAttribute('direction'), 'rtl');
+    assert.equal(text.getAttribute('text-anchor'), 'end');
+    const textX = Number(text.getAttribute('x'));
+    const symbols = window.document.querySelectorAll('#l7-lab circle, #l7-lab line');
+    const symbol = index === 0
+      ? [...symbols].find((item) => item.tagName === 'circle' && item.getAttribute('cy') === '27')
+      : [...symbols].find((item) => item.tagName === 'line' && item.getAttribute('y1') === String(48 + (index - 1) * 18));
+    assert.ok(symbol, `missing symbol for lesson 7 legend ${label}`);
+    const symbolLeft = symbol.tagName === 'circle'
+      ? Number(symbol.getAttribute('cx')) - Number(symbol.getAttribute('r'))
+      : Math.min(Number(symbol.getAttribute('x1')), Number(symbol.getAttribute('x2')));
+    assert.ok(symbolLeft > textX, `${label} symbol should be right of its RTL label`);
+    assert.ok(symbolLeft >= 474, `${label} symbol should stay inside the legend box`);
+    assert.ok(symbol.tagName === 'circle'
+      ? Number(symbol.getAttribute('cx')) + Number(symbol.getAttribute('r')) <= 630
+      : Math.max(Number(symbol.getAttribute('x1')), Number(symbol.getAttribute('x2'))) <= 630,
+    `${label} symbol should stay inside the legend box`);
+  }
+  window.happyDOM.abort();
+
+  const rocWindow = new Window();
+  rocWindow.document.body.innerHTML = await readFile(path.join(root, 'lessons/06-threshold-roc.html'), 'utf8');
+  rocWindow.eval(await readFile(path.join(root, 'assets/js/lessons/06-threshold-roc.js'), 'utf8'));
+  const roc = rocWindow.document.getElementById('l6-roc');
+  assert.deepEqual(roc.getAttribute('viewBox').split(' ').map(Number), [0, 0, 420, 336]);
+  const [horizontal, vertical] = roc.querySelectorAll('line');
+  const plotWidth = Number(horizontal.getAttribute('x2')) - Number(horizontal.getAttribute('x1'));
+  const plotHeight = Number(vertical.getAttribute('y2')) - Number(vertical.getAttribute('y1'));
+  assert.deepEqual(
+    [horizontal.getAttribute('x1'), horizontal.getAttribute('x2'), horizontal.getAttribute('y1'), horizontal.getAttribute('y2')],
+    ['72', '348', '292', '292'],
+  );
+  assert.deepEqual(
+    [vertical.getAttribute('x1'), vertical.getAttribute('x2'), vertical.getAttribute('y1'), vertical.getAttribute('y2')],
+    ['72', '72', '16', '292'],
+  );
+  assert.equal(plotWidth, 276);
+  assert.equal(plotHeight, 276);
+  rocWindow.happyDOM.abort();
+});
+
 test('build fails when a lesson content fragment is missing', async (t) => {
   const sourceDir = await copySourceIntoTempDirectory(t);
   const outputDir = await mkdtemp(path.join(os.tmpdir(), 'spr-dist-'));
